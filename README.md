@@ -16,6 +16,14 @@ MLBのデータ集積サイトBaseball Savant上の各種指標を取得し、
 
 また、独自指標として `Contact Efficiency` を定義し、既存指標である `Squared-Up%` と比較しています。
 
+## AIの使用範囲
+
+本アプリは、Python・Flask・HTML・CSS・JavaScriptの学習を目的の一つとしており、実装は基本的に自分で調べながら行いました。
+
+AIは、理解できないコードや実装方法について質問する補助的な用途に使用していますが、コード生成を主体とした開発は行っていません。
+
+使用したコードについては、処理内容を確認し、自分で説明・修正できる状態で実装しています。
+
 ## スクリーンショット
 
 ![アプリ画面](images/stats.png)
@@ -112,8 +120,8 @@ scikit-learnを用いてContact Efficiencyを算出し、既存指標との比�
 ### 1. リポジトリを取得
 
 ```bash
-git clone <このリポジトリのURL>
-cd <リポジトリ名>
+git clone https://github.com/ishidaken0108-sketch/mlb-pawapuro-ability-app.git
+cd mlb-pawapuro-ability-app
 ```
 
 ### 2. 必要なライブラリをインストール
