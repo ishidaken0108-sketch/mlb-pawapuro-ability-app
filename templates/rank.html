@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+{% macro rank(value) %}
+    {% if not value %}
+        <span></span>
+    {% elif value >= 90 %}
+        <span class="rank rank-s">S</span>
+    {% elif value >= 80 %}
+        <span class="rank rank-a">A</span>
+    {% elif value >= 70 %}
+        <span class="rank rank-b">B</span>
+    {% elif value >= 60 %}
+        <span class="rank rank-c">C</span>
+    {% elif value >= 50 %}
+        <span class="rank rank-d">D</span>
+    {% elif value >= 40 %}
+        <span class="rank rank-e">E</span>
+    {% elif value >= 20 %}
+        <span class="rank rank-f">F</span>
+    {% else %}
+        <span class="rank rank-g">G</span>
+    {% endif %}
+{% endmacro %}
+<head>
+    <meta charset="UTF-8">
+    <title>MLB → パワプロ能力変換</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <p>
+    <a href="/">検索ページに戻る</a>
+    </p>
+    <h1>総合ランキング</h1>
+
+    <table>
+        <tr>
+            <th>順位</th>
+            <th>選手</th>
+            <th>
+                {% if sort=="overall" and order=="desc" %}
+                    <a href=/rank?sort=overall&order=asc>総合力</a>
+                {% else %}
+                    <a href=/rank?sort=overall&order=desc>総合力</a>
+                {% endif %}
+            </th>
+            <th>
+                {% if sort=="meet" and order=="desc" %}
+                    <a href=/rank?sort=meet&order=asc>ミート</a>
+                {% else %}
+                    <a href=/rank?sort=meet&order=desc>ミート</a>
+                {% endif %}
+            </th>
+            <th>
+                {% if sort=="power" and order=="desc" %}
+                    <a href=/rank?sort=power&order=asc>パワー</a>
+                {% else %}
+                    <a href=/rank?sort=power&order=desc>パワー</a>
+                {% endif %}
+            </th>
+            <th>
+                {% if sort=="speed" and order=="desc" %}
+                    <a href=/rank?sort=speed&order=asc>走力</a>
+                {% else %}
+                    <a href=/rank?sort=speed&order=desc>走力</a>
+                {% endif %}              
+            </th>
+            <th>
+                {% if sort=="arm" and order=="desc" %}
+                    <a href=/rank?sort=arm&order=asc>肩力</a>
+                {% else %}
+                    <a href=/rank?sort=arm&order=desc>肩力</a>
+                {% endif %}       
+            </th>
+            <th>
+                {% if sort=="difence" and order=="desc" %}
+                    <a href=/rank?sort=difence&order=asc>守備力</a>
+                {% else %}
+                    <a href=/rank?sort=difence&order=desc>守備力</a>
+                {% endif %}                 
+            </th>
+        </tr>
+
+        {% for player in ranking %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ player["player_name"] }}</td>
+
+            <td>
+                {{ player["overall"] }}
+                {{ rank(player["overall"]) }}
+            </td>
+
+            <td>
+                {{ player["meet"] }}
+                {{ rank(player["meet"]) }}
+            </td>
+
+            <td>
+                {{ player["power"] }}
+                {{ rank(player["power"]) }}
+            </td>
+
+            <td>
+                {{ player["speed"] }}
+                {{ rank(player["speed"]) }}
+            </td>
+
+            <td>
+                {{ player["arm"] }}
+                {{ rank(player["arm"]) }}
+            </td>
+
+            <td>
+                {{ player["difence"] }}
+                {{ rank(player["difence"]) }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+{% macro rank(value) %}
+    {% if not value %}
+        <span></span>
+    {% elif value >= 90 %}
+        <span class="rank rank-s">S</span>
+    {% elif value >= 80 %}
+        <span class="rank rank-a">A</span>
+    {% elif value >= 70 %}
+        <span class="rank rank-b">B</span>
+    {% elif value >= 60 %}
+        <span class="rank rank-c">C</span>
+    {% elif value >= 50 %}
+        <span class="rank rank-d">D</span>
+    {% elif value >= 40 %}
+        <span class="rank rank-e">E</span>
+    {% elif value >= 20 %}
+        <span class="rank rank-f">F</span>
+    {% else %}
+        <span class="rank rank-g">G</span>
+    {% endif %}
+{% endmacro %}
+<head>
+    <meta charset="UTF-8">
+    <title>MLB → パワプロ能力変換</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>MLB選手能力変換</h1>
+
+    <form method="POST">
+        <p>選手を選択</p>
+        <input type="text" id="searchInput" placeholder="選手名を検索">
+        <br>
+        <select name="player_id" id="playerSelect">
+            {% if not player_id %}
+                <option value="" disabled selected>選手を選択</option>
+            {% else %}
+                <option value="" disabled>選手を選択</option>
+            {% endif %}
+            {% for _, player in batters.iterrows() %}
+                {% if player["player_id"]|int == player_id %}            
+                    <option value="{{ player['player_id'] }}" selected>
+                        {{ player['player_name'] }}
+                    </option>   
+                {% else %}      
+                    <option value="{{ player['player_id'] }}">
+                        {{ player['player_name'] }}
+                    </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
+        <button type="submit">検索</button>
+    </form>
+    {% if dataNone%}
+        <p>能力を生成するのに十分なデータがありません</p>
+    {% else %}
+        <div class="stat-row">
+            <div class="stat-label">ミート</div>
+            <div class="stat-value">{{ player_meet }}</div>
+            <div class="stat-rank">{{ rank(player_meet) }}</div>
+            <div class="stat-bar">
+                <div class="stat-bar-fill" style="width: {{ player_meet }}%;"></div>
+            </div>
+        </div>
+        <div class="stat-row">
+            <div class="stat-label">パワー</div>
+            <div class="stat-value">{{ player_power }}</div>
+            <div class="stat-rank">{{ rank(player_power) }}</div>
+            <div class="stat-bar">
+                <div class="stat-bar-fill" style="width: {{ player_power }}%;"></div>
+            </div>
+        </div>
+        <div class="stat-row">
+            <div class="stat-label">走力</div>
+            <div class="stat-value">{{ player_speed }}</div>
+            <div class="stat-rank">{{ rank(player_speed) }}</div>
+            <div class="stat-bar">
+                <div class="stat-bar-fill" style="width: {{ player_speed }}%;"></div>
+            </div>
+        </div>
+        <div class="stat-row">
+            <div class="stat-label">肩力</div>
+            <div class="stat-value">{{ player_arm }}</div>
+            <div class="stat-rank">{{ rank(player_arm) }}</div>
+            <div class="stat-bar">
+                <div class="stat-bar-fill" style="width: {{ player_arm }}%;"></div>
+            </div>
+        </div>
+        <div class="stat-row">
+            <div class="stat-label">守備力</div>
+            <div class="stat-value">{{ player_difence }}</div>
+            <div class="stat-rank">{{ rank(player_difence) }}</div>
+            <div class="stat-bar">
+                <div class="stat-bar-fill" style="width: {{ player_difence }}%;"></div>
+            </div>
+        </div>
+    {% endif%}  
+    <p>
+    <a href="/rank">ランキングを見る</a>
+    </p>
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const playerSelect = document.getElementById("playerSelect");
+    searchInput.addEventListener("input",function(){
+        const playerText = searchInput.value.toLowerCase();
+        const options = playerSelect.options;
+        let visibleCount = 0;
+        for (let option of options) {
+            const playerName = option.text.toLowerCase();
+
+            if (playerName.includes(playerText)){
+                option.hidden = false;
+                visibleCount++;
+            }
+            else{
+                option.hidden = true;
+            }
+        }
+     
+        if (playerText == "") {
+            playerSelect.size = 1;
+        }
+        else {
+            playerSelect.size = Math.max(2,Math.min(visibleCount,8));
+        }
+    });
+
+    playerSelect.addEventListener("change",function() {
+    playerSelect.size = 1;
+    playerSelect.form.submit();
+    });
+
+
+</script>
+</body>
+</html>
